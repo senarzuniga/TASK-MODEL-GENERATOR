@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Streamlit App",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "streamlit_app.py", "--server.port=8501"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Generate Workbook (CLI)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Run Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
