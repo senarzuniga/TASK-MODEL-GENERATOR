@@ -1,3 +1,4 @@
+
 """
 Entry point for the B2B Commercial Task Model Generator.
 
@@ -15,8 +16,17 @@ from __future__ import annotations
 
 import argparse
 import sys
+import logging
 
 from generator import build_workbook
+
+
+logging.basicConfig(
+    filename='app.log',
+    filemode='a',
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.ERROR
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -50,7 +60,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"✅  Workbook created: {saved_path}")
         return 0
     except Exception as exc:  # noqa: BLE001
-        print(f"❌  Error generating workbook: {exc}", file=sys.stderr)
+        logging.error("Error generating workbook", exc_info=True)
+        print("❌  An error occurred while generating the workbook. Please check the logs for more details.", file=sys.stderr)
         return 1
 
 
