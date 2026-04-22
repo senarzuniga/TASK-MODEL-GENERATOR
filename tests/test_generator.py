@@ -1,9 +1,11 @@
+
 """
 Tests for the B2B Commercial Task Model Generator.
 """
 
 import os
 import tempfile
+import logging
 
 import pytest
 from openpyxl import load_workbook
@@ -11,6 +13,10 @@ from openpyxl import load_workbook
 from generator import build_workbook
 from generator.data import TASKS
 from generator.models import AutomationLevel, MaturityLevel, Priority, Task
+
+# Configure logger for testing
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 
 # ---------------------------------------------------------------------------
@@ -177,6 +183,14 @@ class TestBuildWorkbook:
         ws = wb["B2B Task Model"]
         assert ws.auto_filter.ref is not None
 
+    def test_logging_on_error(self, caplog):
+        with caplog.at_level(logging.ERROR):
+            try:
+                raise ValueError("Test error")
+            except ValueError as e:
+                logger.error("Caught an error: %s", e)
+        assert "Caught an error: Test error" in caplog.text
+
 
 # ---------------------------------------------------------------------------
 # CLI entry point tests
@@ -200,3 +214,4 @@ class TestCLI:
         result = main([])
         assert result == 0
         assert os.path.isfile(tmp_path / "Elite_B2B_Sales_Task_Model.xlsx")
+
