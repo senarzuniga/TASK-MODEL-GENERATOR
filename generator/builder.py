@@ -1,3 +1,4 @@
+
 """
 Excel workbook builder.
 
@@ -74,10 +75,12 @@ def _write_task_row(ws: Worksheet, task: Task, row_index: int) -> None:
 
         # Override fill for priority and maturity columns
         if col_idx == _COL_PRIORITY:
+            # Apply specific fill and font styles for priority column
             cell.fill = priority_fill(str(value))
             cell.font = Font(bold=True, size=9, name="Calibri")
             cell.alignment = Alignment(horizontal="center", vertical="top")
         elif col_idx == _COL_MATURITY:
+            # Apply specific fill and font styles for maturity column
             cell.fill = maturity_fill(str(value))
             cell.font = Font(bold=True, size=9, name="Calibri")
             cell.alignment = Alignment(horizontal="center", vertical="top")
@@ -237,96 +240,4 @@ def _build_kpi_reference_sheet(wb: Workbook) -> Worksheet:
 
 def _build_legend_sheet(wb: Workbook) -> Worksheet:
     """Build a legend / guide sheet explaining column values and colour coding."""
-    ws = wb.create_sheet(title="Legend & Guide")
-
-    sections = [
-        ("COLUMN GUIDE", None),
-        ("Domain", "High-level commercial category grouping related tasks."),
-        ("Task Name", "Short descriptive name of the execution task."),
-        ("Objective", "The specific outcome this task is designed to achieve."),
-        ("Trigger", "The event, condition, or time that initiates the task."),
-        ("Execution Method", "Step-by-step description of how the task is carried out."),
-        ("Key Inputs", "Data, resources, or information required before starting."),
-        ("Expected Output", "The tangible deliverable or result produced."),
-        ("Primary KPI", "The main metric this task directly impacts."),
-        ("Secondary KPIs", "Supporting metrics also affected by the task."),
-        ("Frequency", "How often the task should be executed."),
-        ("Priority Level", "High = critical path / Low = nice-to-have."),
-        ("Owner Role", "Organisational role responsible for execution."),
-        ("Dependencies", "Pre-conditions or linked tasks required."),
-        ("Tools / Documents", "Systems, templates, or assets needed."),
-        ("AI Augmentation Role", "How an AI agent can support or automate the task."),
-        ("Automation Level", "Manual → Semi → Full automation classification."),
-        ("Sales Maturity Level", "Minimum organisational maturity to execute this task."),
-        ("", ""),
-        ("COLOUR CODING — PRIORITY", None),
-        ("High", "Red highlight — execute immediately / no exceptions."),
-        ("Medium", "Orange highlight — schedule and track."),
-        ("Low", "Green highlight — execute when capacity allows."),
-        ("", ""),
-        ("COLOUR CODING — MATURITY", None),
-        ("Basic", "Grey — foundational process; no technology required."),
-        ("Advanced", "Yellow — requires CRM discipline and some tooling."),
-        ("Elite", "Green — requires AI/automation and data maturity."),
-        ("", ""),
-        ("MATURITY MODEL DESCRIPTION", None),
-        ("Basic", "Structure: define processes, roles, and accountability."),
-        ("Advanced", "Optimisation: use data, KPIs, and tooling to improve."),
-        ("Elite", "Predictive & AI-driven: automate, forecast, and scale."),
-    ]
-
-    ws.column_dimensions["A"].width = 28
-    ws.column_dimensions["B"].width = 70
-
-    bold_font = Font(bold=True, size=10, name="Calibri", color="1F3864")
-    section_font = Font(bold=True, size=11, name="Calibri", color="FFFFFF")
-    section_fill = PatternFill(fill_type="solid", fgColor="1F3864")
-    normal_font = Font(size=9, name="Calibri")
-    wrap_align = Alignment(wrap_text=True, vertical="top")
-
-    for label, description in sections:
-        ws.append([label, description or ""])
-        row = ws.max_row
-        cell_a = ws.cell(row=row, column=1)
-        cell_b = ws.cell(row=row, column=2)
-
-        if description is None and label:
-            # Section heading
-            cell_a.font = section_font
-            cell_a.fill = section_fill
-            cell_b.fill = section_fill
-            cell_a.border = THIN_BORDER
-            cell_b.border = THIN_BORDER
-            ws.row_dimensions[row].height = 20
-        else:
-            cell_a.font = bold_font
-            cell_b.font = normal_font
-            cell_b.alignment = wrap_align
-            cell_a.border = THIN_BORDER
-            cell_b.border = THIN_BORDER
-
-    return ws
-
-
-def build_workbook(output_path: str = "Elite_B2B_Sales_Task_Model.xlsx") -> str:
-    """
-    Build the complete B2B Commercial Task Model workbook and save to disk.
-
-    Parameters
-    ----------
-    output_path:
-        File path for the generated ``.xlsx`` file.
-
-    Returns
-    -------
-    str
-        The resolved output path of the saved file.
-    """
-    wb = Workbook()
-
-    _build_task_sheet(wb)
-    _build_kpi_reference_sheet(wb)
-    _build_legend_sheet(wb)
-
-    wb.save(output_path)
-    return output_path
+    ws = wb.create_sheet
