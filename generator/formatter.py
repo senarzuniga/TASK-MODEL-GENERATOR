@@ -1,3 +1,4 @@
+
 """
 Excel formatting utilities.
 
@@ -117,6 +118,7 @@ def domain_group_style() -> dict:
 
 def data_row_style(row_index: int) -> dict:
     """Return keyword arguments for a standard data cell."""
+    # Alternate row colors for better readability
     bg = COLOURS["row_even"] if row_index % 2 == 0 else COLOURS["row_odd"]
     return {
         "font": Font(size=9, name="Calibri"),
@@ -131,6 +133,7 @@ def data_row_style(row_index: int) -> dict:
 
 def priority_fill(priority_value: str) -> PatternFill:
     """Return a PatternFill based on priority text."""
+    # Map priority levels to specific colors
     mapping = {
         "High": COLOURS["priority_high"],
         "Medium": COLOURS["priority_medium"],
@@ -142,6 +145,7 @@ def priority_fill(priority_value: str) -> PatternFill:
 
 def maturity_fill(maturity_value: str) -> PatternFill:
     """Return a PatternFill based on maturity level text."""
+    # Map maturity levels to specific colors
     mapping = {
         "Basic": COLOURS["maturity_basic"],
         "Advanced": COLOURS["maturity_advanced"],
@@ -186,3 +190,4 @@ def apply_cell_style(cell, style: dict) -> None:
         cell.alignment = style["alignment"]
     if "border" in style:
         cell.border = style["border"]
+
