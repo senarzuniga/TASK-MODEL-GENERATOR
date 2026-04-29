@@ -17,15 +17,18 @@ from __future__ import annotations
 import argparse
 import sys
 import logging
+import os
 
 from generator import build_workbook
 
+
+log_level = os.getenv('LOG_LEVEL', 'ERROR').upper()
 
 logging.basicConfig(
     filename='app.log',
     filemode='a',
     format='%(asctime)s - %(levelname)s - %(message)s',
-    level=logging.ERROR
+    level=getattr(logging, log_level, logging.ERROR)
 )
 
 
@@ -67,3 +70,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
