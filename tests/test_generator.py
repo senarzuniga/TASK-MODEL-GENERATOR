@@ -1,9 +1,12 @@
+
 """
 Tests for the B2B Commercial Task Model Generator.
 """
 
 import os
 import tempfile
+import logging
+from unittest.mock import patch
 
 import pytest
 from openpyxl import load_workbook
@@ -200,3 +203,21 @@ class TestCLI:
         result = main([])
         assert result == 0
         assert os.path.isfile(tmp_path / "Elite_B2B_Sales_Task_Model.xlsx")
+
+    def test_file_not_found_error_handling(self, tmp_path):
+        from main import main
+        with patch('generator.build_workbook', side_effect=FileNotFoundError("File not found")):
+            result = main(["--output", str(tmp_path / "non_existent_dir/output.xlsx")])
+            assert result == 1
+
+    def test_value_error_handling(self, tmp_path):
+        from main import main
+        with patch('generator.build_workbook', side_effect=ValueError("Invalid value")):
+            result = main(["--output", str(tmp_path / "invalid_output.xlsx")])
+            assert result == 1
+
+    def test_unexpected_error_handling(self, tmp_path):
+        from main import main
+        with patch('generator.build_workbook', side_effect=Exception("Unexpected error")):
+            result = main(["--output", str(tmp_path / "unexpected_error.xlsx")])
+            assert result == 1
