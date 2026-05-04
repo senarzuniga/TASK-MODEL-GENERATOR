@@ -1,3 +1,4 @@
+
 """
 Tests for the B2B Commercial Task Model Generator.
 """
@@ -7,7 +8,6 @@ import tempfile
 
 import pytest
 from openpyxl import load_workbook
-
 from generator import build_workbook
 from generator.data import TASKS
 from generator.models import AutomationLevel, MaturityLevel, Priority, Task
@@ -102,6 +102,18 @@ class TestTaskCatalogue:
     def test_unique_task_names(self):
         names = [t.name for t in TASKS]
         assert len(names) == len(set(names)), "Duplicate task names found"
+
+    @pytest.mark.parametrize("task_count", [0, 1, 1000])
+    def test_edge_case_task_counts(self, task_count):
+        """Test edge cases for task counts."""
+        tasks = TASKS[:task_count]
+        assert len(tasks) == task_count
+
+    @pytest.mark.parametrize("invalid_input", [None, "", 123, {}, []])
+    def test_invalid_task_inputs(self, invalid_input):
+        """Test invalid inputs for task fields."""
+        with pytest.raises(Exception):
+            Task(name=invalid_input, domain=invalid_input, objective=invalid_input)
 
 
 # ---------------------------------------------------------------------------
