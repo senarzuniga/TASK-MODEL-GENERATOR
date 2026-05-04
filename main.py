@@ -59,10 +59,16 @@ def main(argv: list[str] | None = None) -> int:
         saved_path = build_workbook(args.output)
         print(f"✅  Workbook created: {saved_path}")
         return 0
-    except Exception as exc:  # noqa: BLE001
-        logging.error("Error generating workbook", exc_info=True)
-        print("❌  An error occurred while generating the workbook. Please check the logs for more details.", file=sys.stderr)
-        return 1
+    except FileNotFoundError as exc:
+        logging.error("File not found: %s", exc, exc_info=True)
+        print("❌  The specified file path was not found. Please check the path and try again.", file=sys.stderr)
+    except ValueError as exc:
+        logging.error("Value error: %s", exc, exc_info=True)
+        print("❌  An invalid value was encountered. Please check the input values and try again.", file=sys.stderr)
+    except Exception as exc:
+        logging.error("Unexpected error: %s", exc, exc_info=True)
+        print("❌  An unexpected error occurred. Please check the logs for more details.", file=sys.stderr)
+    return 1
 
 
 if __name__ == "__main__":
