@@ -1,9 +1,5 @@
-"""
-Excel formatting utilities.
-
-Provides colour palettes, cell styles, and helper functions used by the
-workbook builder to produce a professional, print-ready output.
-"""
+import json
+import os
 
 from __future__ import annotations
 
@@ -17,35 +13,12 @@ from openpyxl.styles import (
 )
 from openpyxl.utils import get_column_letter
 
-# ---------------------------------------------------------------------------
-# Colour palette (hex without leading #)
-# ---------------------------------------------------------------------------
-COLOURS = {
-    # Header row
-    "header_bg": "1F3864",       # Dark navy
-    "header_fg": "FFFFFF",       # White text
+# Load styles from configuration file
+STYLE_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'styles.json')
+with open(STYLE_CONFIG_PATH, 'r') as f:
+    STYLES = json.load(f)
 
-    # Domain group title rows
-    "domain_bg": "2E75B6",       # Mid blue
-    "domain_fg": "FFFFFF",
-
-    # Data row alternates
-    "row_even": "EBF3FB",        # Very light blue
-    "row_odd": "FFFFFF",         # White
-
-    # Priority highlights
-    "priority_high": "FF4C4C",   # Red
-    "priority_medium": "FFA500", # Orange
-    "priority_low": "70AD47",    # Green
-
-    # Maturity level
-    "maturity_basic": "D9D9D9",
-    "maturity_advanced": "FFE699",
-    "maturity_elite": "C6EFCE",
-
-    # Border
-    "border": "BDD7EE",
-}
+COLOURS = STYLES['colours']
 
 # ---------------------------------------------------------------------------
 # Thin border style
