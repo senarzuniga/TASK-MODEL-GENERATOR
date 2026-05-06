@@ -1,22 +1,7 @@
-
-"""
-Entry point for the B2B Commercial Task Model Generator.
-
-Usage
------
-    python main.py [--output PATH]
-
-Examples
---------
-    python main.py
-    python main.py --output /reports/Sales_Tasks_Q1.xlsx
-"""
-
-from __future__ import annotations
-
 import argparse
 import sys
 import logging
+import os
 
 from generator import build_workbook
 
@@ -50,13 +35,23 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             "Defaults to 'Elite_B2B_Sales_Task_Model.xlsx' in the current directory."
         ),
     )
+    parser.add_argument(
+        "--styles",
+        "-s",
+        default=os.path.join(os.path.dirname(__file__), 'generator', 'styles.json'),
+        metavar="PATH",
+        help=(
+            "Path to a custom styles.json file. "
+            "Defaults to 'styles.json' in the generator directory."
+        ),
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     try:
-        saved_path = build_workbook(args.output)
+        saved_path = build_workbook(args.output, args.styles)
         print(f"✅  Workbook created: {saved_path}")
         return 0
     except Exception as exc:  # noqa: BLE001
