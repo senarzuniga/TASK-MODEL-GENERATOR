@@ -1,9 +1,6 @@
-"""
-Tests for the B2B Commercial Task Model Generator.
-"""
-
 import os
 import tempfile
+import json
 
 import pytest
 from openpyxl import load_workbook
@@ -200,3 +197,10 @@ class TestCLI:
         result = main([])
         assert result == 0
         assert os.path.isfile(tmp_path / "Elite_B2B_Sales_Task_Model.xlsx")
+
+    def test_main_with_custom_styles(self, tmp_path):
+        from main import main
+        out = str(tmp_path / "cli_test_custom_styles.xlsx")
+        styles_path = os.path.join(os.path.dirname(__file__), '..', 'generator', 'styles.json')
+        main(["--output", out, "--styles", styles_path])
+        assert os.path.isfile(out)
